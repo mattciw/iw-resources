@@ -11,41 +11,24 @@ Terse by design; the long form lives in each repo's `CLAUDE.md` and `docs/`.
 
 # Part 1 — Onboarding (one-time setup)
 
-Order: clone → symlink → fix statusline path → place local files → install plugins → launch.
+Order: clone → symlink → install plugins → launch.
 
 ## 1. Clone + symlink config
 
 ```
 # clone this repo, symlink config into ~/.claude (use your own home path)
 git clone git@github-iw:mattciw/iw-resources.git ~/Repos/iw-resources
-ln -s ~/Repos/iw-resources/agents        ~/.claude/agents
-ln -s ~/Repos/iw-resources/settings.json ~/.claude/settings.json
+ln -s ~/Repos/iw-resources/agents               ~/.claude/agents
+ln -s ~/Repos/iw-resources/settings.json        ~/.claude/settings.json
+ln -s ~/Repos/iw-resources/statusline-command.sh ~/.claude/statusline-command.sh
 ```
 
-## 2. Fix the statusline path (don't skip — it's per-machine)
+`settings.json` references the statusline via `$HOME`, so it resolves on any
+machine once the script is symlinked to `~/.claude/` — nothing to edit per host.
+(Project-scoped rules — scope discipline, conventions — come from each repo's own
+committed `CLAUDE.md`, so there's no global `CLAUDE.md` to place here.)
 
-`settings.json` is shared, but its `statusLine.command` points at an **absolute
-home path** (`/home/mattc/.claude/statusline-command.sh`) that won't exist on
-your machine. Because the file is symlinked from this repo, you can't just edit
-it for yourself without changing everyone's copy.
-
-The durable fix (do once, for everyone): make the path `$HOME`-relative in
-`settings.json` so it resolves for every user and this step disappears —
-
-```
-"command": "bash $HOME/.claude/statusline-command.sh"
-```
-
-The script itself (`statusline-command.sh`) has no hardcoded paths; it just needs
-to live at `~/.claude/statusline-command.sh` (placed in step 3).
-
-## 3. Place the remaining local files
-
-These live alongside the symlinked config in `~/.claude/`:
-`CLAUDE.md` (global instructions), `statusline-command.sh`, `.mcp.json`
-(Playwright MCP). Symlink them from this repo the same way as step 1.
-
-## 4. Install plugins — NOT automatic
+## 2. Install plugins — NOT automatic
 
 `enabledPlugins` in `settings.json` only **enables** plugins that are already
 installed; on a fresh machine it enables nothing. You must install them first,
@@ -71,7 +54,7 @@ CLI installs are scriptable and don't block on trust prompts. After install, the
 symlinked `settings.json` flips all eight on at startup. Keep this list in sync
 with `enabledPlugins` in `settings.json` — they must match.
 
-## 5. Staying current
+## 3. Staying current
 
 Pull updates with `git pull` in `iw-resources` — agents and `settings.json`
 update in place via the symlinks. Never re-tar.

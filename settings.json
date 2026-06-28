@@ -41,7 +41,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "bash /home/mattc/.claude/statusline-command.sh"
+    "command": "bash $HOME/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
