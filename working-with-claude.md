@@ -1,67 +1,13 @@
-# Working with Claude
+# Working with Claude — way of working
 
-Two parts, kept separate:
+How the iw-cnapp project drives Claude, day to day. Terse by design; the long
+form lives in the repo's `CLAUDE.md` and `docs/`.
 
-- **Part 1 — Onboarding**: one-time machine setup. Do this once.
-- **Part 2 — Way of working**: how the project drives Claude, day to day.
-
-Terse by design; the long form lives in each repo's `CLAUDE.md` and `docs/`.
-
----
-
-# Part 1 — Onboarding (one-time setup)
-
-Order: clone → symlink → install plugins → launch.
-
-## 1. Clone + symlink config
-
-```
-# clone this repo, symlink config into ~/.claude (use your own home path)
-git clone git@github-iw:mattciw/iw-resources.git ~/Repos/iw-resources
-ln -s ~/Repos/iw-resources/agents               ~/.claude/agents
-ln -s ~/Repos/iw-resources/settings.json        ~/.claude/settings.json
-ln -s ~/Repos/iw-resources/statusline-command.sh ~/.claude/statusline-command.sh
-```
-
-`settings.json` references the statusline via `$HOME`, so it resolves on any
-machine once the script is symlinked to `~/.claude/` — nothing to edit per host.
-(Project-scoped rules — scope discipline, conventions — come from each repo's own
-committed `CLAUDE.md`, so there's no global `CLAUDE.md` to place here.)
-
-## 2. Install plugins — NOT automatic
-
-`enabledPlugins` in `settings.json` only **enables** plugins that are already
-installed; on a fresh machine it enables nothing. You must install them first,
-*before* the first interactive launch (run as a script):
-
-```
-# register the two marketplaces this config uses
-claude plugin marketplace add anthropics/claude-plugins-official
-claude plugin marketplace add thedotmack/claude-mem
-
-# install the eight enabled plugins
-claude plugin install superpowers@claude-plugins-official
-claude plugin install frontend-design@claude-plugins-official
-claude plugin install code-review@claude-plugins-official
-claude plugin install security-guidance@claude-plugins-official
-claude plugin install claude-code-setup@claude-plugins-official
-claude plugin install code-simplifier@claude-plugins-official
-claude plugin install claude-md-management@claude-plugins-official
-claude plugin install claude-mem@thedotmack
-```
-
-CLI installs are scriptable and don't block on trust prompts. After install, the
-symlinked `settings.json` flips all eight on at startup. Keep this list in sync
-with `enabledPlugins` in `settings.json` — they must match.
-
-## 3. Staying current
-
-Pull updates with `git pull` in `iw-resources` — agents and `settings.json`
-update in place via the symlinks. Never re-tar.
-
----
-
-# Part 2 — Way of working
+> **Setting up Claude Code for iw-cnapp?** Environment setup — plugins to
+> install, the in-repo agents/permissions/skills you get for free, and the
+> personal settings left to you — lives in the repo itself:
+> `docs/getting-started/05-claude-code-setup.md`. This file is the *way of
+> working*, not the setup.
 
 ## Sessions & worktrees
 
